@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI × ART BUSAN: 새로운 창작의 시대</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony (Off-white, Dark Gray, Muted Teal) -->
+    <!-- Application Structure Plan: A thematic, non-linear SPA designed for exploration. The structure consists of four main sections accessible via a sticky navigation: 1) '소개' (Intro) combines the core thesis and an interactive primer on AI tech to establish a baseline understanding. 2) '탐험' (Explore) uses an interactive card layout to compare global 'System Builders' with the Korean scene, highlighting key differences. 3) '쟁점' (Issues) visualizes the complex US vs. EU copyright debate with an interactive chart and uses cards for ethical dilemmas, making them digestible. 4) '제안' (Proposal) is the climax, featuring an interactive chart of Busan's 'Data-DNA' and a detailed strategic framework for becoming 'System Builders', addressing needs, gaps, and solutions. This structure was chosen to transform a linear presentation into an engaging, user-driven journey, facilitating deeper understanding for a diverse audience of artists, developers, and policymakers. -->
+    <!-- Visualization & Content Choices: 1. AI History/Models (Goal: Inform) -> Interactive Cards (HTML/CSS/JS) for easy digestion of technical info. 2. Global/Local Artists (Goal: Compare) -> Tabbed content layout (JS) to contrast 'System Builders' vs. 'Appliers'. 3. Copyright Rules (Goal: Compare) -> Horizontal Bar Chart (Chart.js) to visually contrast US (human control) vs. EU (transparency) legal philosophies. 4. Busan's Data-DNA (Goal: Organize/Relate) -> Polar Area Chart (Chart.js) to show multifaceted identity pillars. Clicking a pillar dynamically updates related content (JS), making the core proposal interactive and tangible. 5. System Builder Strategy (Goal: Analyze/Propose) -> A three-column grid layout (Needs, Gaps, Solutions) to clearly structure the strategic analysis for Busan's transition from AI consumer to producer. All choices prioritize clarity and engagement over static text, using Canvas-based charts and JS interactions. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F9FA;
+            color: #212529;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 400px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link.active {
+            color: #0891B2;
+            border-bottom-color: #0891B2;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl md:text-2xl font-bold text-cyan-700">AI × ART BUSAN</h1>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#intro" class="nav-link text-gray-600 hover:text-cyan-600 border-b-2 border-transparent pb-1">소개</a>
+                    <a href="#explore" class="nav-link text-gray-600 hover:text-cyan-600 border-b-2 border-transparent pb-1">탐험</a>
+                    <a href="#issues" class="nav-link text-gray-600 hover:text-cyan-600 border-b-2 border-transparent pb-1">쟁점</a>
+                    <a href="#proposal" class="nav-link text-gray-600 hover:text-cyan-600 border-b-2 border-transparent pb-1">부산 제안</a>
+                </div>
+                 <div class="md:hidden">
+                    <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md p-2 text-gray-700">
+                        <option value="#intro">소개</option>
+                        <option value="#explore">탐험</option>
+                        <option value="#issues">쟁점</option>
+                        <option value="#proposal">부산 제안</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="bg-white pt-16 pb-20 md:pt-24 md:pb-28">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight">
+                    <span class="text-cyan-600">AI × ART BUSAN</span>: 격동의 도시,<br>새로운 파도를 그리다
+                </h2>
+                <p class="mt-6 max-w-3xl mx-auto text-lg md:text-xl text-gray-600">
+                    생성형 AI는 예술 창작의 패러다임을 바꾸는 거대한 물결입니다. 자연과 산업, 지역과 세계가 공존하는 역동의 도시 부산은 이 새로운 파도를 타고, 도시 고유의 '데이터-DNA'를 활용하여 세계가 주목할 독창적인 예술을 창조할 잠재력을 가지고 있습니다. 이 발표는 그 가능성을 탐험하는 여정입니다.
+                </p>
+            </div>
+        </section>
+
+        <section id="intro" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-800">1. 인공 뮤즈의 해부</h3>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">예술가와 기획자, 개발자 모두를 위해 AI 기술의 핵심을 쉽게 풀어봅니다. 이 섹션은 AI가 어떻게 예술가의 '생각하는 붓'이 될 수 있는지, 그 역사와 현재의 주요 기술들을 소개하여 앞으로의 논의를 위한 공통의 기반을 마련합니다.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-center mb-16">
+                    <div class="bg-white p-8 rounded-xl shadow-lg card">
+                        <h4 class="text-2xl font-bold text-cyan-700 mb-4">알고리즘적 꿈의 역사</h4>
+                        <p class="text-gray-600">AI의 발전은 크게 두 가지 흐름으로 나뉩니다. 인간의 논리를 따르는 '기호주의'와 데이터로부터 스스로 배우는 '연결주의'입니다. 초기 AI는 체스 게임처럼 명확한 규칙 기반의 '기호주의'가 주도했지만, 곧 한계에 부딪혔습니다. 2010년대, 방대한 데이터와 강력한 컴퓨팅 파워를 만나 '딥러닝'으로 부활한 '연결주의'는 알파고의 승리로 그 잠재력을 증명하며 현재 AI 예술의 폭발적 성장을 이끌고 있습니다. 이 두 접근법은 예술가가 AI를 통제된 '도구'로 쓸 것인지, 예측 불가능한 '협업 파트너'로 삼을 것인지에 대한 철학적 선택과 맞닿아 있습니다.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg card">
+                         <h4 class="text-2xl font-bold text-cyan-700 mb-4">창조의 엔진: 생성 모델</h4>
+                        <p class="text-gray-600 mb-4">현재 AI 예술의 핵심은 새로운 콘텐츠를 만들어내는 '생성 모델'입니다. 아래 탭을 클릭하여 대표적인 기술들을 확인해보세요.</p>
+                        <div class="flex border-b">
+                            <button data-tab="gan" class="tab-btn flex-1 py-2 text-center font-semibold text-cyan-600 border-b-2 border-cyan-600">GANs</button>
+                            <button data-tab="llm" class="tab-btn flex-1 py-2 text-center font-semibold text-gray-500">Transformers</button>
+                            <button data-tab="diffusion" class="tab-btn flex-1 py-2 text-center font-semibold text-gray-500">Diffusion</button>
+                        </div>
+                        <div id="gan" class="tab-content mt-4 text-gray-600">
+                            <p><b>생성적 적대 신경망 (GANs):</b> '위조지폐범(생성자)'과 '경찰(판별자)'이 서로 경쟁하며 진짜 같은 이미지를 만드는 법을 배웁니다. 초기 AI 예술계를 지배했던 기술입니다.</p>
+                        </div>
+                        <div id="llm" class="tab-content mt-4 text-gray-600 hidden">
+                            <p><b>트랜스포머와 거대 언어 모델 (LLMs):</b> 텍스트의 복잡한 문맥을 이해하는 데 탁월하며, 현재 '텍스트-투-이미지' 모델이 우리의 언어를 시각 예술로 변환하는 핵심 기반입니다.</p>
+                        </div>
+                        <div id="diffusion" class="tab-content mt-4 text-gray-600 hidden">
+                            <p><b>확산 모델 (Diffusion Models):</b> 순수한 노이즈에서 점차 노이즈를 걷어내며 정교한 이미지를 완성합니다. 마치 조각가가 돌에서 형상을 찾아내는 과정과 유사합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-800">2. 글로벌 AI 아트-스케이프</h3>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">세계의 예술가들은 AI를 어떻게 활용하여 예술의 경계를 확장하고 있을까요? 이 섹션에서는 해외 선구자들의 철학과 방법론을 국내 사례와 비교하며, 부산이 나아가야 할 방향에 대한 통찰을 얻고자 합니다. 단순히 도구를 사용하는 것을 넘어, 자신만의 예술 시스템을 구축하는 작가들의 사례를 탐구합니다.</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="card bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-bold text-cyan-800">레픽 아나돌</h4>
+                        <p class="text-sm text-gray-500 mb-2">데이터의 시인</p>
+                        <p class="text-gray-700">보이지 않는 데이터를 '생각하는 붓'으로 삼아 거대한 건축물을 캔버스 삼아 공공의 기억을 시각화합니다. 그는 데이터를 시적인 몰입형 경험으로 변환하는 '데이터 조각가'입니다.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-bold text-cyan-800">마리오 클링게만</h4>
+                        <p class="text-sm text-gray-500 mb-2">자율적 창조의 탐험가</p>
+                        <p class="text-gray-700">AI가 단순한 도구를 넘어 '자율적 예술가'가 될 수 있는지 탐구합니다. 그는 AI를 복잡한 악기처럼 다루며 포스트-휴먼 창의성의 가능성에 질문을 던집니다.</p>
+                    </div>
+                    <div class="card bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h4 class="text-xl font-bold text-cyan-800">소우웬 충</h4>
+                        <p class="text-sm text-gray-500 mb-2">인간-기계 협업의 안무가</p>
+                        <p class="text-gray-700">자신이 만든 로봇 팔과 함께 그림을 그리는 라이브 퍼포먼스를 통해 인간과 기계의 협력적 관계를 탐구합니다. 그의 작업은 진화하는 '이중주'입니다.</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 bg-cyan-50 border-l-4 border-cyan-500 p-6 rounded-r-lg">
+                    <h4 class="font-bold text-lg text-cyan-900">핵심 통찰: 시스템 빌더 vs. 애플리케이션 사용자</h4>
+                    <p class="text-cyan-800 mt-2">해외 선구자들이 자신만의 독자적인 AI 시스템을 구축하는 '시스템 빌더'인 반면, 많은 국내 사례는 기존 상용 도구를 창의적으로 '응용'하는 데 중점을 둡니다. 부산이 진정한 글로벌 리더가 되기 위해서는, 지역의 예술가, 공학자, 기업이 협력하여 AI 도구의 '소비자'에서 '생산자'로 전환해야 합니다.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="issues" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-800">3. 알고리즘적 딜레마</h3>
+                    <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">AI 예술의 발전은 저작권, 데이터 편향, 노동의 가치 등 복잡한 법적, 윤리적 질문들을 동반합니다. 이 섹션은 이러한 딜레마를 탐색하며, 예술가와 기관이 현명하게 항해할 수 있는 전략적 방향을 모색합니다. 기술의 가능성만큼이나 그 이면의 도전 과제를 이해하는 것은 중요합니다.</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg card">
+                        <h4 class="text-2xl font-bold text-cyan-700 mb-4">저작권의 난제: 미국 vs EU</h4>
+                        <p class="text-gray-600 mb-4">AI 생성물의 저작권에 대한 접근법은 국가마다 다릅니다. 이는 예술가의 창작 방식과 전략에 직접적인 영향을 미칩니다.</p>
+                        <div class="chart-container h-64 md:h-80">
+                            <canvas id="copyrightChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-lg card">
+                        <h4 class="text-2xl font-bold text-cyan-700 mb-4">데이터셋의 유령들</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="font-semibold text-lg">저작권 침해</h5>
+                                <p class="text-gray-600">AI는 인터넷의 방대한 데이터를 학습합니다. 이 과정에서 저작권이 있는 자료가 무단으로 사용될 수 있다는 점은 여전히 해결되지 않은 문제입니다.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-lg">알고리즘 편향</h5>
+                                <p class="text-gray-600">AI는 인간이 만든 데이터의 편견까지 학습합니다. 특정 인종이나 성별에 대한 왜곡된 이미지를 생성하며 사회적 편견을 증폭시킬 위험이 있습니다.</p>
+                            </div>
+                            <div>
+                                <h5 class="font-semibold text-lg">노동의 가치</h5>
+                                <p class="text-gray-600">특정 작가의 화풍을 AI가 순식간에 모방하는 능력은 예술가의 고유한 스타일과 창작 노동의 가치를 위협한다는 윤리적 우려를 낳습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="proposal" class="py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h3 class="text-3xl md:text-4xl font-bold text-gray-800">4. 부산 제안: 하이퍼-로컬, 테크노-문화 정체성</h3>
+                    <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">이제 부산을 위한 구체적인 비전을 제시합니다. 부산의 역동적인 도시 정체성을 '데이터-DNA'로 해석하고, 이를 예술적 영감의 원천으로 삼는 전략입니다. 이 섹션은 부산이 어떻게 AI 기술을 통해 자신만의 고유한 문화적 목소리를 낼 수 있는지, 그 실질적인 방법론과 전략적 프레임워크를 제안합니다.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="order-2 lg:order-1">
+                        <h4 class="text-2xl font-bold text-cyan-700 mb-4">부산 고유의 '데이터-DNA'</h4>
+                        <p class="text-gray-600 mb-4">부산의 정체성은 '대비'에 있습니다. 이 도시의 상반된 매력들을 데이터로 변환하면 독창적인 예술의 원재료가 됩니다. 아래 차트의 각 항목을 클릭하여 부산의 데이터가 어떻게 예술이 될 수 있는지 탐색해보세요.</p>
+                        <div id="dna-details" class="bg-gray-50 p-6 rounded-lg min-h-[200px]">
+                            <h5 id="dna-title" class="font-bold text-lg text-cyan-800">차트 항목을 선택하세요</h5>
+                            <p id="dna-description" class="text-gray-700 mt-2"></p>
+                        </div>
+                    </div>
+                    <div class="order-1 lg:order-2 chart-container h-80 md:h-96">
+                        <canvas id="busanDnaChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="mt-20">
+                    <h4 class="text-2xl font-bold text-center mb-4 text-gray-800">시스템 빌더로의 도약: AI 도구의 생산자가 되기 위하여</h4>
+                    <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto mb-12">
+                        세계적 선구자들처럼 독자적인 AI 예술 시스템을 구축하기 위해, 부산은 '소비자'에서 '생산자'로 전환해야 합니다. 이는 구체적인 진단과 전략적 지원을 통해 가능합니다.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg card border-t-4 border-cyan-500">
+                            <h5 class="font-bold text-xl text-cyan-700 mb-3">무엇이 필요한가? (필요조건)</h5>
+                            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                                <li><b>융합 교육:</b> 예술, 공학, 데이터 과학을 아우르는 프로젝트 기반의 커리큘럼.</li>
+                                <li><b>핵심 자원 접근성:</b> 고성능 컴퓨팅(GPU) 자원과 예술적으로 큐레이션된 '부산 데이터-DNA'.</li>
+                                <li><b>협업 공간:</b> 예술가와 기술자가 자유롭게 만나 실험하는 'AI 아트 파운드리'.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg card border-t-4 border-rose-500">
+                            <h5 class="font-bold text-xl text-rose-700 mb-3">부산의 현재는? (결핍요소)</h5>
+                            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                                <li><b>단절된 전문성:</b> 예술계, 대학, 기술 기업이 각자의 영역에 고립.</li>
+                                <li><b>자원 부족:</b> 개인 작가가 감당하기 힘든 컴퓨팅 비용과 가공되지 않은 원시 데이터.</li>
+                                <li><b>모험 기피형 지원:</b> 실패 가능성이 높은 장기 R&D형 예술 프로젝트에 대한 지원 부족.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg card border-t-4 border-emerald-500">
+                            <h5 class="font-bold text-xl text-emerald-700 mb-3">어떻게 지원할 것인가? (해결방안)</h5>
+                            <ul class="space-y-3 text-gray-700 list-disc list-inside">
+                                <li><b>'AI 아트 파운드리' 설립:</b> F1963 등을 거점으로 GPU, 기술 멘토링, 데이터를 원스톱 지원.</li>
+                                <li><b>'부산 데이터-DNA' 펀드 조성:</b> 고위험-고수익의 독자 모델 개발 프로젝트를 위한 특화 펀드.</li>
+                                <li><b>산학연관 협력체계 구축:</b> 대학-미술관-기업-기관이 참여하는 상호 레지던시 및 공동 R&D 추진.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <h4 class="text-2xl font-bold">결론: 부산의 다음 물결, 생각하는 붓으로 미래를 그리다</h4>
+            <p class="mt-4 max-w-3xl mx-auto text-gray-300">부산의 길은 유행을 따르는 것이 아니라, 자신의 정체성을 끌어안음으로써 시대를 선도하는 것입니다. 이 도시의 역동적인 모순은 AI 시대의 가장 위대한 창조적 자산입니다. 부산은 이제 '생각하는 붓'을 손에 쥐고, 도시 자신의 영혼에 대한 초상화를 그려낼 기회를 맞이했습니다.</p>
+            <p class="text-sm text-gray-500 mt-8">제3회 궁리정담 [AI×ART: 새로운 창작의 시대] 발표자료</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const mobileNav = document.getElementById('mobile-nav');
+            if(mobileNav) {
+                mobileNav.addEventListener('change', (e) => {
+                    const targetId = e.target.value;
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main > section[id]');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+                        });
+                        if(mobileNav && mobileNav.value !== `#${id}`) {
+                           mobileNav.value = `#${id}`;
+                        }
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+
+            sections.forEach(section => observer.observe(section));
+
+            const tabContainer = document.querySelector('.flex.border-b');
+            if(tabContainer){
+                const tabBtns = tabContainer.querySelectorAll('.tab-btn');
+                const tabContents = tabContainer.parentElement.querySelectorAll('.tab-content');
+
+                tabBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const tabId = btn.dataset.tab;
+
+                        tabBtns.forEach(b => {
+                            b.classList.remove('text-cyan-600', 'border-cyan-600');
+                            b.classList.add('text-gray-500');
+                        });
+                        btn.classList.add('text-cyan-600', 'border-cyan-600');
+                        btn.classList.remove('text-gray-500');
+
+                        tabContents.forEach(content => {
+                            content.classList.toggle('hidden', content.id !== tabId);
+                        });
+                    });
+                });
+            }
+
+            const copyrightCtx = document.getElementById('copyrightChart');
+            if(copyrightCtx) {
+                new Chart(copyrightCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['핵심 원칙', '저작자성 판단 기준', '예술가 전략'],
+                        datasets: [{
+                            label: '미국 (USCO)',
+                            data: [10, 10, 10],
+                            backgroundColor: 'rgba(8, 145, 178, 0.6)',
+                            borderColor: 'rgba(8, 145, 178, 1)',
+                            borderWidth: 1,
+                            stack: 'Stack 0',
+                        }, {
+                            label: '유럽연합 (AI Act)',
+                            data: [10, 10, 10],
+                            backgroundColor: 'rgba(14, 116, 144, 0.6)',
+                            borderColor: 'rgba(14, 116, 144, 1)',
+                            borderWidth: 1,
+                            stack: 'Stack 1',
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.dataset.label || '';
+                                        const index = context.dataIndex;
+                                        let text = '';
+                                        if (label === '미국 (USCO)') {
+                                            if (index === 0) text = "'인간 저작자성' 원칙 강조";
+                                            if (index === 1) text = "인간의 '창의적 통제'와 기여도";
+                                            if (index === 2) text = "창작 '과정'과 인간의 개입을 강조";
+                                        } else {
+                                            if (index === 0) text = "'위험 기반' 규제 및 투명성";
+                                            if (index === 1) text = "학습 데이터의 '상세 요약' 공개 의무";
+                                            if (index === 2) text = "'윤리적' 데이터 기반 모델 개발 유리";
+                                        }
+                                        return `${label}: ${text}`;
+                                    }
+                                }
+                            },
+                            legend: { position: 'top' }
+                        },
+                        scales: {
+                            x: { display: false, stacked: true },
+                            y: { stacked: true, ticks: { font: { size: 14, weight: 'bold' } } }
+                        }
+                    }
+                });
+            }
+
+            const busanDnaCtx = document.getElementById('busanDnaChart');
+            if(busanDnaCtx) {
+                const dnaDetailsContent = {
+                    0: { title: '로컬 & 글로벌: 데이터 조각', description: '부산항의 실시간 물류 데이터를 GAN, 데이터 시각화 기술로 분석하여 글로벌 무역의 흐름을 보여주는 살아있는 데이터 조각을 만듭니다. 이는 레픽 아나돌의 작업 방식과 유사합니다.' },
+                    1: { title: '열정 & 인간미: 도시의 목소리', description: '자갈치 시장의 소리, 부산 사투리 데이터를 LLM, 오디오 스타일 변환 기술로 학습시켜 도시의 목소리를 담은 새로운 시나 사운드스케이프를 생성합니다.' },
+                    2: { title: '자연 & 도시: 협력적 예술', description: '낙동강 생태 데이터와 도시 교통 데이터를 강화 학습, 실시간 시각화 기술로 연결하여, 자연과 도시의 호흡이 상호작용하는 반응형 디지털 페인팅을 창조합니다.' },
+                    3: { title: '산업 & 예술: 공간의 꿈', description: 'F1963 같은 산업 유산의 과거와 현재 데이터를 확산 모델, StyleGAN으로 학습시켜, 공간의 변모 과정을 탐구하는 초현실적인 꿈 이미지를 생성합니다.' }
+                };
+                const dnaTitleEl = document.getElementById('dna-title');
+                const dnaDescriptionEl = document.getElementById('dna-description');
+
+                new Chart(busanDnaCtx.getContext('2d'), {
+                    type: 'polarArea',
+                    data: {
+                        labels: ['로컬 & 글로벌', '열정 & 인간미', '자연 & 도시', '산업 & 예술'],
+                        datasets: [{
+                            label: '부산 데이터-DNA',
+                            data: [25, 25, 25, 25],
+                            backgroundColor: ['rgba(14, 165, 233, 0.5)', 'rgba(244, 114, 182, 0.5)', 'rgba(52, 211, 153, 0.5)', 'rgba(168, 85, 247, 0.5)'],
+                            borderColor: ['rgba(14, 165, 233, 1)', 'rgba(244, 114, 182, 1)', 'rgba(52, 211, 153, 1)', 'rgba(168, 85, 247, 1)'],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: { r: { display: false } },
+                        plugins: { legend: { position: 'top' }, tooltip: { enabled: false } },
+                        onClick: (e, elements) => {
+                            if (elements.length > 0 && dnaTitleEl && dnaDescriptionEl) {
+                                const index = elements[0].index;
+                                const content = dnaDetailsContent[index];
+                                if(content) {
+                                    dnaTitleEl.textContent = content.title;
+                                    dnaDescriptionEl.textContent = content.description;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
